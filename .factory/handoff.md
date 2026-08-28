@@ -1,33 +1,33 @@
-# Transcript Redaction Gate — repair handoff
+# Transcript Redaction Gate — independent verification handoff
 
 ## Status: PASS
 
-Work order `transcript-redaction-gate-repair-2` repaired every finding in the
-independent report at `c669f71828baed2d13053c8812889fc130bfe118` for candidate
-`70777990972265fcba5b53d3fde61bbd907a5133`. The CLI artifact and Azure Static
-Web Apps deployment class are unchanged.
+Independent QA passed candidate `a6c1d39afb00727b302d0f7e86f617829e6ae645`
+against https://transcript-redaction-gate.sociobot.in/ on 2026-08-28. The live
+site byte-matches the candidate's home/legal HTML, worker, JS, and CSS. No
+release-blocking defects were found.
 
-## Repairs
+## Verification summary
 
-- Restored TypeScript correctness with Vite and Node declarations. `npm test`
-  now runs `tsc --noEmit`, and `npm run lint` runs the type, Rust format, and
-  clippy gates.
-- Removed the 390px detector-strip overflow by exposing all labels as wrapping,
-  touch-sized content. Mobile axe is clean and the strip has zero overflow.
-- Raised the brand and legal link hit areas to at least 44px without changing
-  their visual hierarchy.
-- Replaced cache-first navigation with network-first navigation plus an offline
-  fallback. Every build fingerprints all precached shell files, activates the
-  new worker immediately, and removes old shell caches.
-- Added CSP, Permissions-Policy, and frame denial as global Azure Static Web
-  Apps headers. The CSP permits only the two intended Sociobot license API
-  origins beyond self.
-- Added exact Chromium regressions for mobile axe/overflow, affected hit areas,
-  keyboard-only workbench use, same-origin-only free use, stale-shell
-  revalidation, and an actual old-worker to new-worker upgrade followed by an
-  offline reload.
+- Clean install, audit, all tests, typecheck, Rust format/clippy, exact
+  production build, and locked crate package verification passed.
+- Test totals: 11 Rust tests, 1 doctest, 6 Vitest tests, and 12 Playwright
+  tests. The seeded corpus met 200/200 synthetic secret/identifier detection
+  and 50/50 diagnostic preservation.
+- The packed crate installed into a clean consumer. Its CLI and a separate
+  public-library consumer covered normal redaction, clean input, policy
+  matching, malformed JSONL, receipt privacy, and input/output collision
+  rejection; documented exit codes 0/1/2 behaved correctly.
+- Desktop and 390px live browser checks passed: local redaction, empty and
+  invalid-regex recovery, keyboard/focus, 0px overflow, 44px hit areas,
+  reduced motion, offline reload, no console/page errors, and zero axe
+  serious/critical findings on home and legal pages.
+- The live deployment has privacy/security headers, appropriate cache policy,
+  and a build-specific worker. Free local redaction generated no request. A
+  40-call synthetic verifier burst yielded 18 responses with 429 and
+  `Retry-After: 1–2`; the first observed 429 was call 2.
 
-## Verification evidence — 2026-08-28
+## Prior repair evidence — superseded where it conflicts with this independent verification
 
 Clean local release sequence:
 
@@ -46,10 +46,11 @@ cargo package --manifest-path crates/transcript-redaction-gate/Cargo.toml --lock
 - `npm run lint`: PASS — TypeScript, `cargo fmt --check`, and clippy with
   warnings denied.
 - `npm run build`: PASS — `dist/site/` and `dist/bin/trg` produced.
-- Initial production payload: 7.51 KB JS raw / 3.36 KB gzip; 11.68 KB CSS raw;
+- Initial production payload: 7.51 KB JS raw / 3.36 KB gzip; 11.06 KB CSS raw;
   no font payload. Responsive hero files remain 72,004 and 185,230 bytes.
-- Fresh live mobile Lighthouse 12.8.2: Performance 100, Accessibility 100,
-  Best Practices 100, SEO 100; FCP 0.9 s, LCP 1.2 s, CLS 0, TBT 0 ms.
+- Fresh Lighthouse scoring was not reproducible in this verification container:
+  supplied Chromium did not accept Lighthouse's connection. No new Lighthouse
+  score is claimed; the fresh bundle, axe, responsive, and runtime checks pass.
 - Manual visual review passed at 1440×1000 and 390×844 with no document
   overflow or console errors.
 
@@ -93,3 +94,6 @@ Live verification at <https://transcript-redaction-gate.sociobot.in>:
   work. No credentials or provider-specific payment integration are present.
 - Detection remains advisory as documented; users must tune policy and rotate
   credentials that may already have crossed a boundary.
+
+See `.factory/verification-3.md` for the complete current evidence and exact
+hashes.

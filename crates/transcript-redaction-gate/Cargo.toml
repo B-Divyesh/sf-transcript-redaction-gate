@@ -2,6 +2,7 @@
 name = "transcript-redaction-gate"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85"
 license = "MIT"
 description = "Offline, deterministic secret redaction for terminal and JSONL transcripts"
 repository = "https://github.com/B-Divyesh/sf-transcript-redaction-gate"

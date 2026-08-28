@@ -30,7 +30,7 @@
           <p class="lede">Redact credentials, policy patterns, and high-entropy tokens locally. Keep the useful diagnostics. Export a receipt that contains evidence—not secrets.</p>
           <div class="hero-actions">
             <a class="button primary" href="#workbench"><span aria-hidden="true">■</span> Run local check</a>
-            <button class="button ghost copy-command" type="button" data-command="cargo install transcript-redaction-gate">Copy install command</button>
+            <button class="button ghost copy-command" type="button" data-command="cargo install --git https://github.com/B-Divyesh/sf-transcript-redaction-gate transcript-redaction-gate">Copy install command</button>
           </div>
           <ul class="proof-list" aria-label="Product properties">
             <li>Zero uploads</li><li>Deterministic</li><li>CI exit codes</li>
@@ -96,11 +96,11 @@ customer=CUST-12345678 status=failed</textarea>
         </div>
         <div class="command-card">
           <div class="terminal-bar"><span aria-hidden="true">● ● ●</span><span>shell</span></div>
-          <pre><code>cargo install transcript-redaction-gate
+          <pre><code>cargo install --git https://github.com/B-Divyesh/sf-transcript-redaction-gate transcript-redaction-gate
 trg redact agent.jsonl \
   --output agent.safe.jsonl \
   --receipt findings.json</code></pre>
-          <button class="button primary copy-command" type="button" data-command="cargo install transcript-redaction-gate">Copy install command</button>
+          <button class="button primary copy-command" type="button" data-command="cargo install --git https://github.com/B-Divyesh/sf-transcript-redaction-gate transcript-redaction-gate">Copy install command</button>
         </div>
         <div class="workflow" aria-label="Redaction workflow">
           <article><span>01</span><h3>Read locally</h3><p>Terminal text, stdin, and JSONL stay on your machine.</p></article>

@@ -1,0 +1,20 @@
+{
+  "routes": [
+    {
+      "route": "/assets/*",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "route": "/proof-press.webp",
+      "headers": { "cache-control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "route": "/*.html",
+      "headers": { "cache-control": "no-cache" }
+    }
+  ],
+  "navigationFallback": {
+    "rewrite": "/index.html",
+    "exclude": ["/privacy/*", "/terms/*", "/assets/*", "/*.webp", "/*.svg", "/*.js", "/*.json"]
+  }
+}

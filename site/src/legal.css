@@ -1,0 +1,11 @@
+.legal-page { max-width: 900px; margin: auto; padding: 104px 28px 120px; }
+.legal-page h1 { max-width: 850px; font-size: clamp(3rem, 7vw, 5rem); }
+.legal-lede { max-width: 64ch; margin: 28px 0 72px; color: var(--stock); font-size: 20px; }
+.legal-page section { display: grid; grid-template-columns: 260px 1fr; gap: 32px; padding: 32px 0; border-top: 1px solid var(--line); }
+.legal-page section h2 { font-size: 24px; text-transform: none; }
+.legal-page section p { max-width: 64ch; margin: 0; color: var(--stock); }
+.legal-page code { color: var(--cyan); overflow-wrap: anywhere; }
+@media (max-width: 650px) {
+  .legal-page { padding-top: 72px; }
+  .legal-page section { grid-template-columns: 1fr; gap: 8px; }
+}

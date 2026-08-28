@@ -1,0 +1,22 @@
+{
+  "name": "transcript-redaction-gate-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite site",
+    "test": "cargo test --workspace && vitest run && playwright test",
+    "test:site": "vitest run",
+    "build:site": "vite build --config vite.config.ts",
+    "build:cli": "cargo build --release --locked && mkdir -p dist/bin && cp target/release/trg dist/bin/trg",
+    "build": "npm run build:site && npm run build:cli",
+    "preview": "vite preview --config vite.config.ts"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.10.2",
+    "@playwright/test": "1.58.2",
+    "typescript": "5.9.2",
+    "vite": "7.3.6",
+    "vitest": "3.2.7"
+  }
+}

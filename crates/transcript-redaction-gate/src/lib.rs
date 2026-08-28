@@ -11,7 +11,6 @@
 
 use regex::Regex;
 use serde::{Deserialize, Serialize};
-use sha2::{Digest, Sha256};
 use std::{collections::BTreeMap, fmt};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -68,7 +67,6 @@ pub struct Finding {
     pub line: usize,
     pub column: usize,
     pub length: usize,
-    pub fingerprint: String,
 }
 
 /// Safe-to-share proof of what the gate did.
@@ -221,7 +219,6 @@ pub fn redact(input: &str, options: &Options) -> Result<RedactionResult, Error> 
             line,
             column,
             length: value.len(),
-            fingerprint: fingerprint(value),
         });
         *detectors.entry(hit.detector).or_insert(0) += 1;
         cursor = hit.end;
@@ -299,14 +296,6 @@ fn line_column(input: &str, offset: usize) -> (usize, usize) {
         .map_or(before.len(), |(_, tail)| tail.len())
         + 1;
     (line, column)
-}
-
-fn fingerprint(value: &str) -> String {
-    let digest = Sha256::digest(value.as_bytes());
-    format!(
-        "sha256:{:02x}{:02x}{:02x}{:02x}",
-        digest[0], digest[1], digest[2], digest[3]
-    )
 }
 
 fn shannon_entropy(value: &str) -> f64 {
@@ -400,5 +389,35 @@ mod tests {
         let receipt = serde_json::to_string(&result.receipt).unwrap();
         assert!(!receipt.contains("hunter1234"));
         assert!(!receipt.contains("path"));
+    }
+
+    #[test]
+    fn seeded_200_item_corpus_meets_detection_and_preservation_target() {
+        let mut corpus = String::new();
+        for index in 0..50 {
+            corpus.push_str(&format!("aws=AKIA{index:016X}\n"));
+            corpus.push_str(&format!("github=ghp_{index:036}\n"));
+            corpus.push_str(&format!("password=fakeSecret{index:04}AaBbCcDdEe\n"));
+            corpus.push_str(&format!("customer=CUST-{index:08}\n"));
+            corpus.push_str(&format!(
+                "diagnostic-{index:03}: worker finished normally\n"
+            ));
+        }
+        let options = Options {
+            patterns: vec![Pattern {
+                name: "customer-id".into(),
+                regex: r"CUST-[0-9]{8}".into(),
+            }],
+            ..Options::default()
+        };
+        let result = redact(&corpus, &options).unwrap();
+        assert_eq!(result.receipt.finding_count, 200);
+        for index in 0..50 {
+            assert!(
+                result
+                    .output
+                    .contains(&format!("diagnostic-{index:03}: worker finished normally"))
+            );
+        }
     }
 }

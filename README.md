@@ -1,6 +1,6 @@
 # Transcript Redaction Gate
 
-An offline Rust CLI and library that removes secrets from terminal or JSONL transcripts before they cross an external boundary. It emits a redacted copy and a non-sensitive receipt containing detector names, locations, and fingerprints—never the matched values.
+An offline Rust CLI and library that removes secrets from terminal or JSONL transcripts before they cross an external boundary. It emits a redacted copy and a non-sensitive receipt containing detector names, locations, and match lengths—never the matched values.
 
 Use it before pasting logs into a model, attaching a support bundle, or publishing CI artifacts. Detection is deterministic and local. It covers common credential shapes, assignment-style secrets, private keys, configured patterns, and high-entropy tokens; it cannot promise complete PII detection.
 

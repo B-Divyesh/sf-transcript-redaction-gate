@@ -128,6 +128,8 @@ fn run_redact(args: RedactArgs) -> Result<ExitCode, String> {
     if output == receipt {
         return Err("output and receipt must use different paths".into());
     }
+    preflight_target(&output, args.force)?;
+    preflight_target(&receipt, args.force)?;
 
     write_body(&output, result.output.as_bytes(), args.force)?;
     write_receipt(&receipt, &result.receipt, args.force)?;
@@ -223,8 +225,8 @@ fn ensure_distinct(input: &Path, output: &Path) -> Result<(), String> {
     if input == Path::new("-") || output == Path::new("-") {
         return Ok(());
     }
-    let input_abs = absolute(input)?;
-    let output_abs = absolute(output)?;
+    let input_abs = resolved(input)?;
+    let output_abs = resolved(output)?;
     if input_abs == output_abs {
         Err("refusing to overwrite the input transcript".into())
     } else {
@@ -232,14 +234,38 @@ fn ensure_distinct(input: &Path, output: &Path) -> Result<(), String> {
     }
 }
 
-fn absolute(path: &Path) -> Result<PathBuf, String> {
-    if path.is_absolute() {
-        Ok(path.to_path_buf())
+fn resolved(path: &Path) -> Result<PathBuf, String> {
+    if path.exists() {
+        fs::canonicalize(path).map_err(|error| format!("could not resolve path: {error}"))
     } else {
-        std::env::current_dir()
-            .map(|dir| dir.join(path))
-            .map_err(|error| error.to_string())
+        let absolute = if path.is_absolute() {
+            path.to_path_buf()
+        } else {
+            std::env::current_dir()
+                .map_err(|error| error.to_string())?
+                .join(path)
+        };
+        let parent = absolute
+            .parent()
+            .ok_or_else(|| "output path has no parent directory".to_string())?;
+        let parent = fs::canonicalize(parent)
+            .map_err(|error| format!("could not resolve output directory: {error}"))?;
+        Ok(parent.join(
+            absolute
+                .file_name()
+                .ok_or_else(|| "output path has no file name".to_string())?,
+        ))
     }
+}
+
+fn preflight_target(path: &Path, force: bool) -> Result<(), String> {
+    if path != Path::new("-") && path.exists() && !force {
+        return Err(format!(
+            "output already exists: {}; use --force to replace it",
+            path.display()
+        ));
+    }
+    Ok(())
 }
 
 fn write_body(path: &Path, body: &[u8], force: bool) -> Result<(), String> {

@@ -111,6 +111,20 @@ const policyComposer = $("#policy-composer");
 
 type CachedVerdict = { valid: boolean; checkedAt: number };
 
+function storedValue(key: string): string | null {
+  try { return localStorage.getItem(key); } catch { return null; }
+}
+
+function readVerdict(): CachedVerdict | null {
+  try {
+    const raw = storedValue(VERDICT_KEY);
+    return raw ? JSON.parse(raw) as CachedVerdict : null;
+  } catch {
+    try { localStorage.removeItem(VERDICT_KEY); } catch { /* Storage is optional. */ }
+    return null;
+  }
+}
+
 function setUnlocked(unlocked: boolean, message = "") {
   policyComposer.classList.toggle("unlocked", unlocked);
   policyComposer.querySelectorAll<HTMLInputElement | HTMLButtonElement>("input, button").forEach((control) => { control.disabled = !unlocked; });
@@ -119,7 +133,7 @@ function setUnlocked(unlocked: boolean, message = "") {
 }
 
 async function verifyLicense(token: string, force = false) {
-  const cached = JSON.parse(localStorage.getItem(VERDICT_KEY) || "null") as CachedVerdict | null;
+  const cached = readVerdict();
   const fresh = cached && Date.now() - cached.checkedAt < 86_400_000;
   if (cached?.valid) setUnlocked(true, "Team kit unlocked from your last verified license.");
   if (!force && fresh) {
@@ -135,7 +149,8 @@ async function verifyLicense(token: string, force = false) {
     const response = await fetch(`${BILLING_BASE}/api/v1/products/${PRODUCT}/verify?license=${encodeURIComponent(token)}`);
     if (!response.ok) throw new Error("verification service unavailable");
     const verdict = await response.json() as { valid: boolean; reason: string };
-    localStorage.setItem(VERDICT_KEY, JSON.stringify({ valid: verdict.valid, checkedAt: Date.now() }));
+    try { localStorage.setItem(VERDICT_KEY, JSON.stringify({ valid: verdict.valid, checkedAt: Date.now() })); }
+    catch { /* A verified license still applies to the current tab. */ }
     if (verdict.valid) setUnlocked(true, "License verified. Team policy tools are ready.");
     else setUnlocked(false, "License no longer active. You can continue using every core safety feature for free.");
   } catch {
@@ -144,7 +159,8 @@ async function verifyLicense(token: string, force = false) {
 }
 
 function acceptLicense(token: string) {
-  localStorage.setItem(LICENSE_KEY, token);
+  try { localStorage.setItem(LICENSE_KEY, token); }
+  catch { licenseStatus.textContent = "This browser blocked local license storage; verification will apply only to this tab."; }
   void verifyLicense(token, true);
 }
 
@@ -155,7 +171,7 @@ if (returnedLicense) {
   query.delete("license");
   history.replaceState({}, "", `${location.pathname}${query.size ? `?${query}` : ""}${location.hash}`);
 } else {
-  const storedLicense = localStorage.getItem(LICENSE_KEY);
+  const storedLicense = storedValue(LICENSE_KEY);
   if (storedLicense) void verifyLicense(storedLicense);
 }
 

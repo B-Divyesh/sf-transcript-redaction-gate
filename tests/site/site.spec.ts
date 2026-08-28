@@ -35,3 +35,33 @@ test("mobile layout stays within viewport", async ({ page }) => {
   expect(overflow).toBeLessThanOrEqual(0);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
 });
+
+test("returned license is stored, stripped from the URL, and unlocks the composer", async ({ page }) => {
+  await page.route("**/api/v1/products/transcript-redaction-gate/verify?license=*", (route) =>
+    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ valid: true, reason: "ok", expires_at: null }) })
+  );
+  await page.goto("/?license=test_license_token");
+  await expect(page.locator("#lock-tag")).toHaveText("Team kit active");
+  expect(page.url()).not.toContain("license=");
+  expect(await page.evaluate(() => localStorage.getItem("sb_license:transcript-redaction-gate"))).toBe("test_license_token");
+});
+
+test("installed shell and workbench remain available offline", async ({ page, context }) => {
+  await page.goto("/");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  await context.setOffline(true);
+  await page.reload();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await page.getByRole("button", { name: "Run local check" }).click();
+  await expect(page.locator("#gate-badge")).toHaveText("Redacted");
+});
+
+test("home loads without console errors", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("console", (message) => { if (message.type() === "error") errors.push(message.text()); });
+  page.on("pageerror", (problem) => errors.push(problem.message));
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  expect(errors).toEqual([]);
+});

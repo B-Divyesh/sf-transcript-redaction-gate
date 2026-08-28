@@ -1,0 +1,9 @@
+{
+  "slug": "transcript-redaction-gate",
+  "title": "Transcript Redaction Gate",
+  "artifact_class": "cli",
+  "smallest_useful_product": "An offline CLI/library that recognizes common terminal and JSONL transcript formats, applies policy rules and entropy/credential detectors, produces a redacted copy plus a non-sensitive findings receipt.",
+  "success_measure": "On a seeded corpus of 200 credentials and identifiers, it blocks 99% of secrets before export while preserving at least 90% of non-secret diagnostic lines.",
+  "constraints": "Offline by default; patterns are advisory and cannot promise complete PII detection; redact output paths; maintain test fixtures without real secrets.",
+  "monetization": "one-time"
+}

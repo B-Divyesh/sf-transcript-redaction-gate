@@ -1,4 +1,4 @@
-const CACHE = "trg-shell-v1";
+const CACHE = "trg-shell-__TRG_BUILD_ID__";
 const SHELL = ["/", "/privacy/", "/terms/", "/proof-press-800.webp", "/mark.svg"];
 
 self.addEventListener("install", (event) => {
@@ -13,9 +13,34 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || new URL(event.request.url).origin !== self.location.origin) return;
-  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request).then((response) => {
-    const copy = response.clone();
-    caches.open(CACHE).then((cache) => cache.put(event.request, copy));
-    return response;
-  })));
+  if (event.request.mode === "navigate") {
+    event.respondWith(networkFirst(event.request));
+    return;
+  }
+  event.respondWith(cacheFirst(event.request));
 });
+
+async function cacheFirst(request) {
+  const cached = await caches.match(request);
+  if (cached) return cached;
+  const response = await fetch(request);
+  await cacheResponse(request, response);
+  return response;
+}
+
+async function networkFirst(request) {
+  try {
+    const response = await fetch(request);
+    await cacheResponse(request, response);
+    return response;
+  } catch {
+    return (await caches.match(request)) || (await caches.match("/")) || new Response("Offline", { status: 503 });
+  }
+}
+
+async function cacheResponse(request, response) {
+  if (response.ok) {
+    const cache = await caches.open(CACHE);
+    await cache.put(request, response.clone());
+  }
+}

@@ -28,12 +28,29 @@ test("home, privacy, and terms have no serious accessibility violations", async 
   }
 });
 
-test("mobile layout stays within viewport", async ({ page }) => {
+test("mobile detector labels remain fully exposed and pass axe", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(0);
+  const detectorOverflow = await page.locator(".marquee").evaluate((element) => element.scrollWidth - element.clientWidth);
+  expect(detectorOverflow).toBeLessThanOrEqual(0);
+  const results = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa"]).analyze();
+  expect(results.violations.filter((item) => ["serious", "critical"].includes(item.impact ?? ""))).toEqual([]);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+});
+
+test("brand and footer links have touch-sized hit areas", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  for (const link of [page.locator(".brand"), page.locator("footer nav a")]) {
+    const count = await link.count();
+    for (let index = 0; index < count; index += 1) {
+      const box = await link.nth(index).boundingBox();
+      expect(box?.height).toBeGreaterThanOrEqual(44);
+      expect(box?.width).toBeGreaterThanOrEqual(44);
+    }
+  }
 });
 
 test("returned license is stored, stripped from the URL, and unlocks the composer", async ({ page }) => {
@@ -55,6 +72,27 @@ test("installed shell and workbench remain available offline", async ({ page, co
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.getByRole("button", { name: "Run local check" }).click();
   await expect(page.locator("#gate-badge")).toHaveText("Redacted");
+});
+
+test("service worker revalidates a stale cached shell before serving it", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  await page.waitForFunction(() => Boolean(navigator.serviceWorker.controller));
+  const worker = await page.request.get("/sw.js");
+  const workerSource = await worker.text();
+  expect(workerSource).toMatch(/const CACHE = "trg-shell-[a-f0-9]{12}"/);
+  expect(workerSource).not.toContain("__TRG_BUILD_ID__");
+
+  await page.evaluate(async () => {
+    const [cacheName] = await caches.keys();
+    const cache = await caches.open(cacheName);
+    await cache.put(new Request("/"), new Response("<main><h1>Stale shell</h1></main>", {
+      headers: { "content-type": "text/html" }
+    }));
+  });
+  await page.reload();
+  await expect(page.getByRole("heading", { name: /Prove the transcript is clean/i })).toBeVisible();
 });
 
 test("home loads without console errors", async ({ page }) => {

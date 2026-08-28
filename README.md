@@ -70,8 +70,9 @@ assert_eq!(result.receipt.findings.len(), 1);
 Requirements: stable Rust and Node.js 20+.
 
 ```sh
-npm install
+npm ci
 npm test
+npm run lint
 npm run build
 npm run build:site       # static site only -> dist/site
 cargo package --manifest-path crates/transcript-redaction-gate/Cargo.toml

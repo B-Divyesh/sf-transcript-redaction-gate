@@ -5,7 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite site",
-    "test": "cargo test --workspace && vitest run && playwright test",
+    "typecheck": "tsc --noEmit",
+    "lint": "npm run typecheck && cargo fmt --check && cargo clippy --workspace --all-targets -- -D warnings",
+    "test": "npm run typecheck && cargo test --workspace && vitest run && playwright test",
     "test:site": "vitest run",
     "build:site": "vite build --config vite.config.ts",
     "build:cli": "cargo build --release --locked && mkdir -p dist/bin && cp target/release/trg dist/bin/trg",
@@ -15,7 +17,7 @@
   "devDependencies": {
     "@axe-core/playwright": "4.10.2",
     "@playwright/test": "1.58.2",
-    "@types/node": "^22.15.3",
+    "@types/node": "22.15.3",
     "typescript": "5.9.2",
     "vite": "7.3.6",
     "vitest": "3.2.7"

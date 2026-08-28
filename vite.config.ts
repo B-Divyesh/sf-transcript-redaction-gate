@@ -24,8 +24,9 @@ export default defineConfig({
     name: "version-service-worker-cache",
     async writeBundle() {
       const output = resolve(projectRoot, "dist/site");
-      const shell = await readFile(resolve(output, "index.html"));
-      const buildId = createHash("sha256").update(shell).digest("hex").slice(0, 12);
+      const shellFiles = ["index.html", "privacy/index.html", "terms/index.html", "proof-press-800.webp", "mark.svg"];
+      const shell = await Promise.all(shellFiles.map((file) => readFile(resolve(output, file))));
+      const buildId = shell.reduce((hash, file) => hash.update(file), createHash("sha256")).digest("hex").slice(0, 12);
       const workerPath = resolve(output, "sw.js");
       const worker = await readFile(workerPath, "utf8");
       await writeFile(workerPath, worker.replace("__TRG_BUILD_ID__", buildId));

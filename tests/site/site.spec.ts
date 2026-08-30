@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -61,6 +61,33 @@ test("@claim:cli-demo bundled CLI demo writes a private receipt", async () => {
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
+});
+
+test("@claim:cli-input-immutable @claim:cli-output-protection @claim:exit-codes CLI keeps inputs and reports outcomes", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "trg-protection-"));
+  const input = join(directory, "session.log");
+  const output = join(directory, "session.redacted.log");
+  const receipt = join(directory, "session.receipt.json");
+  const source = `Authorization: Bearer ${sampleToken}\nnext line stays\n`;
+  try {
+    await writeFile(input, source);
+    const redacted = await execFileAsync("cargo", ["run", "--quiet", "-p", "transcript-redaction-gate", "--", "redact", input, "--output", output, "--receipt", receipt], { cwd: process.cwd() });
+    expect(redacted.stderr).toContain("1 finding(s) redacted");
+    expect(await readFile(input, "utf8")).toBe(source);
+    await expect(readFile(output, "utf8")).resolves.not.toContain(sampleToken);
+    await expect(execFileAsync("cargo", ["run", "--quiet", "-p", "transcript-redaction-gate", "--", "redact", input, "--output", output], { cwd: process.cwd() })).rejects.toMatchObject({ code: 1 });
+    await expect(execFileAsync("cargo", ["run", "--quiet", "-p", "transcript-redaction-gate", "--", "redact", input, "--output", input], { cwd: process.cwd() })).rejects.toMatchObject({ code: 1 });
+    await expect(execFileAsync("cargo", ["run", "--quiet", "-p", "transcript-redaction-gate", "--", "check", input], { cwd: process.cwd() })).rejects.toMatchObject({ code: 2 });
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
+test("@claim:no-account-required @claim:free-core the sample runs without an account or paid gate", async ({ page }) => {
+  await page.goto("/demo/");
+  await expect(page.locator("#safe-output")).not.toContainText(sampleToken);
+  await expect(page.locator("input[type=password]")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Download receipt" })).toBeEnabled();
 });
 
 test("home has one clear demo action and complete route metadata", async ({ page }) => {

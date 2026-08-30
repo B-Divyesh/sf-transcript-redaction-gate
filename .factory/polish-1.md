@@ -1,6 +1,6 @@
 # Polish round 1 — finding closure
 
-Candidate repaired from `4b73957dfb3e92b9bfe6982f796425b74c94d378`. Evidence is local until the post-push production check: `.factory/evidence/local-demo/screenshot-desktop.png`, `.factory/evidence/local-demo/screenshot-mobile.png`, and `.factory/evidence/local-demo/verify.json`.
+Candidate repaired from `4b73957dfb3e92b9bfe6982f796425b74c94d378` in repair commit `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`. Evidence is local until the post-push production check: `.factory/evidence/local-demo/screenshot-desktop.png`, `.factory/evidence/local-demo/screenshot-mobile.png`, and `.factory/evidence/local-demo/verify.json`.
 
 | Finding | Change made | Evidence |
 | --- | --- | --- |

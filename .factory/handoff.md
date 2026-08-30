@@ -2,7 +2,7 @@
 
 ## Status
 
-Repair complete locally from reviewed candidate `4b73957dfb3e92b9bfe6982f796425b74c94d378`. This handoff will be amended with the final commit and production verification after deployment.
+Repair commit: `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, based on reviewed candidate `4b73957dfb3e92b9bfe6982f796425b74c94d378`. Production verification follows deployment below.
 
 ## Delivered
 

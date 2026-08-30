@@ -20,7 +20,7 @@ Repair commit: `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, with final routing re
 - `npm test`: pass — 12 Rust tests plus one doctest, 9 Vitest tests, and 10 Playwright tests.
 - `npm run lint`: pass.
 - `npm run build`: pass; produces `dist/site/` and `dist/bin/trg`.
-- All seven commands in `.factory/claims.json`: pass.
+- All twelve commands in `.factory/claims.json`: pass.
 - `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/demo/ .factory/evidence/local-demo`: pass (HTTP 200; 549 ms; no console errors; title/lang/one H1/main/alt/buttons passed).
 - Playwright Axe WCAG A/AA mobile check: zero serious/critical issues.
 - Screenshots: `.factory/evidence/local-demo/screenshot-desktop.png` and `.factory/evidence/local-demo/screenshot-mobile.png`.

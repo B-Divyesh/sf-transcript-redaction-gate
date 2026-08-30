@@ -83,6 +83,6 @@ Candidate repaired from `4b73957dfb3e92b9bfe6982f796425b74c94d378` in repair com
 - `npm test`: pass — TypeScript, 12 Rust tests plus doctest, 9 Vitest tests, 10 Playwright tests.
 - `npm run lint`: pass.
 - `npm run build`: pass — `dist/site/` and `dist/bin/trg`.
-- Each command in `.factory/claims.json`: pass.
+- Each of the twelve commands in `.factory/claims.json`: pass.
 - Local `verify-url.sh` on `http://127.0.0.1:4173/demo/`: 200, 549 ms, no console errors, title/lang/one H1/main/alt/buttons passed.
 - Playwright Axe WCAG A/AA on mobile demo: no serious/critical violations. The standalone axe CLI could not find a system Chrome binary; the repository uses Playwright’s installed Chromium through `@axe-core/playwright`.

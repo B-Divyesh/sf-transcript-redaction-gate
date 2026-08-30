@@ -2,7 +2,7 @@
 
 ## Status
 
-Repair commit: `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, based on reviewed candidate `4b73957dfb3e92b9bfe6982f796425b74c94d378`. Production verification follows deployment below.
+Repair commit: `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, with final routing repair `9075ca0`, based on reviewed candidate `4b73957dfb3e92b9bfe6982f796425b74c94d378`. Deployed to <https://transcript-redaction-gate.sociobot.in>.
 
 ## Delivered
 
@@ -24,6 +24,7 @@ Repair commit: `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, based on reviewed can
 - `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/demo/ .factory/evidence/local-demo`: pass (HTTP 200; 549 ms; no console errors; title/lang/one H1/main/alt/buttons passed).
 - Playwright Axe WCAG A/AA mobile check: zero serious/critical issues.
 - Screenshots: `.factory/evidence/local-demo/screenshot-desktop.png` and `.factory/evidence/local-demo/screenshot-mobile.png`.
+- Live cold check: `verify-url.sh https://transcript-redaction-gate.sociobot.in/demo/ .factory/evidence/live-demo` passed (HTTP 200; 600 ms; zero console errors; title/lang/one H1/main/alt/buttons passed). A cache-busted unknown live path returned HTTP 404 with “Page not found — Transcript Redaction Gate” and “This page was not found”; see `.factory/evidence/live-demo/404.html`.
 
 ## Run and package
 

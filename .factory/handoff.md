@@ -25,6 +25,7 @@ Repair commit: `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, with final routing re
 - Playwright Axe WCAG A/AA mobile check: zero serious/critical issues.
 - Screenshots: `.factory/evidence/local-demo/screenshot-desktop.png` and `.factory/evidence/local-demo/screenshot-mobile.png`.
 - Live cold check: `verify-url.sh https://transcript-redaction-gate.sociobot.in/demo/ .factory/evidence/live-demo` passed (HTTP 200; 600 ms; zero console errors; title/lang/one H1/main/alt/buttons passed). A cache-busted unknown live path returned HTTP 404 with “Page not found — Transcript Redaction Gate” and “This page was not found”; see `.factory/evidence/live-demo/404.html`.
+- Live browser check: `/?demo=1` redirected to `/demo/?demo=1`, with the isolated sample already redacted.
 
 ## Run and package
 

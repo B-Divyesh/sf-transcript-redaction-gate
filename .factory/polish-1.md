@@ -1,6 +1,6 @@
 # Polish round 1 — finding closure
 
-Candidate repaired from `4b73957dfb3e92b9bfe6982f796425b74c94d378` in repair commit `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, followed by 404 repair `9075ca0`. Live check: <https://transcript-redaction-gate.sociobot.in/demo/> passed cold at 600 ms with no console errors; evidence is `.factory/evidence/live-demo/screenshot-desktop.png`, `.factory/evidence/live-demo/screenshot-mobile.png`, and `.factory/evidence/live-demo/verify.json`. A cache-busted unknown URL returned HTTP 404 with the designed title and H1 in `.factory/evidence/live-demo/404.html`.
+Candidate repaired from `4b73957dfb3e92b9bfe6982f796425b74c94d378` in repair commit `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, followed by 404 repair `9075ca0`. Live check: <https://transcript-redaction-gate.sociobot.in/demo/> passed cold at 600 ms with no console errors; evidence is `.factory/evidence/live-demo/screenshot-desktop.png`, `.factory/evidence/live-demo/screenshot-mobile.png`, and `.factory/evidence/live-demo/verify.json`. A cold browser opening <https://transcript-redaction-gate.sociobot.in/?demo=1> redirected to `/demo/?demo=1` with the redacted sample ready. A cache-busted unknown URL returned HTTP 404 with the designed title and H1 in `.factory/evidence/live-demo/404.html`.
 
 | Finding | Change made | Evidence |
 | --- | --- | --- |

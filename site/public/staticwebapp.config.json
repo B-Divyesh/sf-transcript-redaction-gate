@@ -20,9 +20,5 @@
       "headers": { "cache-control": "no-cache" }
     }
   ],
-  "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/demo/*", "/privacy/*", "/terms/*", "/404.html", "/assets/*", "/*.webp", "/*.png", "/*.svg", "/*.js", "/*.json"]
-  },
   "responseOverrides": { "404": { "rewrite": "/404.html" } }
 }

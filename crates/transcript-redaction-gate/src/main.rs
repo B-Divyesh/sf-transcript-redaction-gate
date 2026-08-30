@@ -26,6 +26,8 @@ enum Command {
     Redact(RedactArgs),
     /// Inspect without writing a redacted copy; exits 2 when findings exist
     Check(CheckArgs),
+    /// Write and redact the bundled sample in a new temporary directory
+    Demo,
 }
 
 #[derive(Clone, Copy, ValueEnum)]
@@ -109,7 +111,47 @@ fn run(cli: Cli) -> Result<ExitCode, String> {
     match cli.command {
         Command::Redact(args) => run_redact(args),
         Command::Check(args) => run_check(args),
+        Command::Demo => run_demo(),
     }
+}
+
+fn run_demo() -> Result<ExitCode, String> {
+    let directory = std::env::temp_dir().join(format!("trg-demo-{}", std::process::id()));
+    if directory.exists() {
+        fs::remove_dir_all(&directory)
+            .map_err(|error| format!("could not reset demo directory: {error}"))?;
+    }
+    fs::create_dir_all(&directory)
+        .map_err(|error| format!("could not create demo directory: {error}"))?;
+    let input = directory.join("support-session.log");
+    let output = directory.join("support-session.redacted.log");
+    let receipt = directory.join("support-session.receipt.json");
+    fs::write(
+        &input,
+        include_str!("../../../examples/support-session.log"),
+    )
+    .map_err(|error| format!("could not write bundled sample: {error}"))?;
+    let options = Options {
+        patterns: vec![Pattern {
+            name: "customer-id".into(),
+            regex: r"CUST-[0-9]{8}".into(),
+        }],
+        ..Options::default()
+    };
+    let result = redact(
+        &fs::read_to_string(&input).map_err(|error| error.to_string())?,
+        &options,
+    )
+    .map_err(|error| error.to_string())?;
+    write_body(&output, result.output.as_bytes(), false)
+        .map_err(|error| format!("could not write demo output: {error}"))?;
+    write_receipt(&receipt, &result.receipt, false)
+        .map_err(|error| format!("could not write demo receipt: {error}"))?;
+    println!("Demo redacted {} finding(s).", result.receipt.finding_count);
+    println!("Sample: {}", input.display());
+    println!("Redacted transcript: {}", output.display());
+    println!("Receipt: {}", receipt.display());
+    Ok(ExitCode::SUCCESS)
 }
 
 fn run_redact(args: RedactArgs) -> Result<ExitCode, String> {

@@ -1,30 +1,41 @@
-# Transcript Redaction Gate — review 1 handoff
+# Transcript Redaction Gate — polish round 1 handoff
 
-## Status: FAIL
+## Status
 
-Adversarial first-read review 1 is complete against candidate `4b73957dfb3e92b9bfe6982f796425b74c94d378` and the live site on 2026-08-30. The complete evidence and 73 findings are in `.factory/review-1.md`.
+Repair complete locally from reviewed candidate `4b73957dfb3e92b9bfe6982f796425b74c94d378`. This handoff will be amended with the final commit and production verification after deployment.
 
-No product code was changed. This work order changed only the review and handoff documents.
+## Delivered
 
-## Blocking results
+- Plain first screen that names support and engineering teams, the sharing job, and one sample-data action.
+- Direct isolated `/demo/` plus `?demo=1` entry, visible demo banner, reset/start-real controls, precomputed redacted result, and `demo:trg:` storage isolation.
+- Bundled `examples/support-session.log` and `trg demo`, which writes sample/output/receipt into a temporary directory.
+- Full claims registry and tagged browser/Vitest claim tests.
+- Real static routes for demo, privacy, terms, and designed 404; route metadata, social art, icons, canonical links, mobile navigation, focus announcements, sitemap, service worker cache, and Static Web Apps 404 override.
+- Dead Team Kit checkout removed because its product-specific checkout returned 404; no unpurchasable offer remains.
+- Rewritten README, copy audit, catalog description, demo documentation, design provenance, and complete finding map.
 
-- The first screen does not name the intended user or establish one first action.
-- The required one-click isolated browser demo and bundled CLI demo do not exist.
-- `.factory/claims.json` and all `@claim:` tests are absent.
-- The Team Kit purchase link returns HTTP 404.
-- Unknown routes return the homepage with HTTP 200 instead of a designed 404.
+## Verification
 
-## Verification performed
+- `npm ci`: pass.
+- `npm test`: pass — 12 Rust tests plus one doctest, 9 Vitest tests, and 10 Playwright tests.
+- `npm run lint`: pass.
+- `npm run build`: pass; produces `dist/site/` and `dist/bin/trg`.
+- All seven commands in `.factory/claims.json`: pass.
+- `/opt/fleet/lib/verify-url.sh http://127.0.0.1:4173/demo/ .factory/evidence/local-demo`: pass (HTTP 200; 549 ms; no console errors; title/lang/one H1/main/alt/buttons passed).
+- Playwright Axe WCAG A/AA mobile check: zero serious/critical issues.
+- Screenshots: `.factory/evidence/local-demo/screenshot-desktop.png` and `.factory/evidence/local-demo/screenshot-mobile.png`.
 
-- Fresh Chromium contexts at 390×844 and 1440×900, before scrolling.
-- Live demo-flow, request-log, offline-reload, route, focus, metadata, and link checks.
-- Factory `verify-url.sh`: passed its basic live checks with no console errors.
-- Axe 4.10.2 on `/`, `/privacy/`, and `/terms/` at mobile and desktop: zero WCAG 2 A/AA violations.
-- Clean clone: `npm ci`, `npm test`, and `npm run build` passed.
-- Test totals: 11 Rust tests, one Rust doctest, six Vitest tests, and 12 Playwright tests.
-- Build outputs: `dist/site/` and `dist/bin/trg`; initial JavaScript 7.51 kB raw / 3.36 kB gzip.
-- `trg demo` in a temporary directory: exit 2, unrecognized subcommand, no files created.
+## Run and package
 
-## What remains
+```sh
+npm ci
+npm test
+npm run build
+cargo package --manifest-path crates/transcript-redaction-gate/Cargo.toml
+```
 
-Resolve every finding in `.factory/review-1.md`, add and run the claims registry, then repeat the full cold review from scratch. The existing passing implementation tests do not waive the blocking product-contract failures.
+The factory owns publication credentials. Do not publish from this repository.
+
+## Known gaps
+
+None in the repaired product. The standalone `@axe-core/cli` could not launch because this image has no system Chrome binary; the required axe scan ran through Playwright’s installed Chromium instead.

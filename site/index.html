@@ -1,154 +1,19 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#12110f" />
-    <meta name="description" content="Offline deterministic secret redaction for terminal and agent transcripts, before upload." />
-    <title>Transcript Redaction Gate — prove it is safe before upload</title>
-    <link rel="icon" href="/mark.svg" type="image/svg+xml" />
-    <link rel="preload" href="/proof-press-800.webp" as="image" type="image/webp" imagesrcset="/proof-press-800.webp 800w, /proof-press.webp 1200w" imagesizes="(max-width: 900px) 100vw, 55vw" fetchpriority="high" />
-    <link rel="stylesheet" href="/src/style.css" />
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to main content</a>
-    <header class="site-header">
-      <a class="brand" href="/" aria-label="TRG / 0.1 — Transcript Redaction Gate home"><span class="brand-mark" aria-hidden="true"></span><span>TRG / 0.1</span></a>
-      <nav aria-label="Primary navigation">
-        <a href="#workbench">Try locally</a>
-        <a href="#install">Install</a>
-        <a href="#team-kit">Team kit</a>
-      </nav>
-      <span class="network-state" id="network-state"><span aria-hidden="true">●</span> Local-ready</span>
-    </header>
-
-    <main id="main">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">Pre-export privacy boundary / offline CLI</p>
-          <h1 id="hero-title">Prove the transcript is clean <em>before</em> it leaves.</h1>
-          <p class="lede">Redact credentials, policy patterns, and high-entropy tokens locally. Keep the useful diagnostics. Export a receipt that contains evidence—not secrets.</p>
-          <div class="hero-actions">
-            <a class="button primary" href="#workbench"><span aria-hidden="true">■</span> Run local check</a>
-            <button class="button ghost copy-command" type="button" data-command="cargo install --git https://github.com/B-Divyesh/sf-transcript-redaction-gate transcript-redaction-gate">Copy install command</button>
-          </div>
-          <ul class="proof-list" aria-label="Product properties">
-            <li>Zero uploads</li><li>Deterministic</li><li>CI exit codes</li>
-          </ul>
-        </div>
-        <figure class="hero-art">
-          <img src="/proof-press-800.webp" srcset="/proof-press-800.webp 800w, /proof-press.webp 1200w" sizes="(max-width: 900px) 100vw, 55vw" width="1200" height="800" alt="Halftone printing press turning a risky transcript into redacted pages and a stamped receipt" fetchpriority="high" />
-          <figcaption>Boundary 01 — unsafe in, proof out.</figcaption>
-        </figure>
-      </section>
-
-      <section class="marquee" aria-label="Supported detectors">
-        <span>AWS keys</span><span>GitHub tokens</span><span>Private keys</span><span>Bearer auth</span><span>JWTs</span><span>Entropy</span><span>Your regex</span>
-      </section>
-
-      <section class="workbench section" id="workbench" aria-labelledby="workbench-title">
-        <div class="section-heading">
-          <p class="eyebrow">Local workbench / no network</p>
-          <h2 id="workbench-title">Inspect a transcript in this tab</h2>
-          <p>The demo uses a compact browser edition of the deterministic detector. For automation and full policy control, use the Rust CLI.</p>
-        </div>
-        <div class="bench-grid">
-          <div class="input-panel">
-            <div class="panel-label"><span>01 / Input</span><span id="input-count">0 bytes</span></div>
-            <label for="transcript">Transcript text</label>
-            <textarea id="transcript" spellcheck="false" aria-describedby="local-note">Authorization: Bearer demo_token_value_1234567890
+<html lang="en"><head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" /><meta name="theme-color" content="#12110f" />
+<meta name="description" content="Remove detected secrets from terminal and JSONL transcripts before sharing them." />
+<meta property="og:title" content="Transcript Redaction Gate — Redact secrets before sharing" /><meta property="og:description" content="Remove detected secrets from terminal and JSONL transcripts before sharing them." /><meta property="og:image" content="https://transcript-redaction-gate.sociobot.in/proof-sheet-social.webp" /><meta property="og:type" content="website" /><meta property="og:url" content="https://transcript-redaction-gate.sociobot.in/" />
+<meta name="twitter:card" content="summary_large_image" /><meta name="twitter:title" content="Transcript Redaction Gate — Redact secrets before sharing" /><meta name="twitter:description" content="Remove detected secrets from terminal and JSONL transcripts before sharing them." /><meta name="twitter:image" content="https://transcript-redaction-gate.sociobot.in/proof-sheet-social.webp" />
+<link rel="canonical" href="https://transcript-redaction-gate.sociobot.in/" /><link rel="icon" href="/mark.svg" type="image/svg+xml" /><link rel="apple-touch-icon" href="/apple-touch-icon.png" /><link rel="preload" href="/proof-press-800.webp" as="image" type="image/webp" fetchpriority="high" />
+<title>Transcript Redaction Gate — Redact secrets</title><link rel="stylesheet" href="/src/style.css" /></head>
+<body><a class="skip-link" href="#main">Skip to main content</a><header class="site-header"><a class="brand" href="/" aria-label="Transcript Redaction Gate home"><span class="brand-mark" aria-hidden="true"></span><span>TRG / 0.1</span></a><nav class="desktop-nav" aria-label="Primary navigation"><a href="/demo/">Demo</a><a href="#install">Install</a><a href="/privacy/">Privacy</a></nav><details class="mobile-nav"><summary>Menu</summary><nav aria-label="Mobile navigation"><a href="/">Home</a><a href="/demo/">Demo</a><a href="#install">Install</a><a href="/privacy/">Privacy</a></nav></details></header><p class="route-status sr-status" aria-live="polite"></p>
+<main id="main"><section class="hero" aria-labelledby="hero-title"><div class="hero-copy"><p class="eyebrow">Offline transcript redaction</p><h1 id="hero-title" tabindex="-1">Redact secrets before sharing transcripts</h1><p class="lede">For support and engineering teams sharing terminal logs, it removes detected credentials while keeping diagnostic lines.</p><div class="hero-actions"><a class="button primary" href="/demo/"><span aria-hidden="true">■</span> Try it with sample data</a><span class="action-note">See a redacted transcript and receipt immediately.</span></div><ul class="proof-list" aria-label="Product facts"><li>Runs on your device</li><li>Core CLI is free</li><li>No account required</li></ul></div><figure class="hero-art"><img src="/proof-press-800.webp" width="1200" height="800" alt="A print press turns a risky transcript into a redacted transcript and receipt" fetchpriority="high" /><figcaption>A transcript enters; a redacted transcript and receipt leave.</figcaption></figure></section>
+<section class="proof-preview section" aria-labelledby="preview-title"><div class="section-heading"><div><p class="eyebrow">Sample result</p><h2 id="preview-title">See what redacted output looks like</h2></div><p>The sample removes a bearer token and customer reference. Its receipt records detectors, lines, columns, and lengths.</p></div><div class="proof-card"><div><p class="panel-label">Original transcript</p><pre><code>Authorization: Bearer demo_token_value_1234567890
 build completed in 1325ms
-customer=CUST-12345678 status=failed</textarea>
-            <div class="bench-controls">
-              <label for="demo-pattern">Advisory pattern</label>
-              <input id="demo-pattern" type="text" value="CUST-[0-9]{8}" autocomplete="off" />
-              <button class="button primary" id="run-check" type="button">Run local check</button>
-            </div>
-            <p id="local-note" class="microcopy">Your text never leaves this page. Invalid patterns are reported without changing the input.</p>
-          </div>
-          <div class="output-panel" aria-labelledby="receipt-title">
-            <div class="panel-label"><span>02 / Safe output</span><span id="gate-badge" class="badge waiting">Waiting</span></div>
-            <h3 id="receipt-title">Findings receipt</h3>
-            <div id="empty-receipt" class="empty-state">
-              <span class="registration" aria-hidden="true"></span>
-              <p>Run the check to align the gate and produce a share-safe receipt.</p>
-            </div>
-            <div id="result" class="result" hidden>
-              <p class="result-total"><strong id="finding-count">0</strong> sensitive span(s) removed</p>
-              <ol id="finding-list" class="finding-list"></ol>
-              <label for="safe-output">Redacted transcript</label>
-              <textarea id="safe-output" readonly></textarea>
-              <div class="result-actions">
-                <button class="button ghost" id="copy-output" type="button">Copy safe output</button>
-                <button class="button ghost" id="download-receipt" type="button">Download receipt</button>
-              </div>
-            </div>
-            <p class="error-message" id="demo-error" role="alert" hidden></p>
-            <p class="sr-status" id="demo-status" aria-live="polite"></p>
-          </div>
-        </div>
-      </section>
-
-      <section class="install section" id="install" aria-labelledby="install-title">
-        <div class="section-heading compact">
-          <p class="eyebrow">Single binary / Rust 1.85+</p>
-          <h2 id="install-title">Put the gate on the boundary</h2>
-        </div>
-        <div class="command-card">
-          <div class="terminal-bar"><span aria-hidden="true">● ● ●</span><span>shell</span></div>
-          <pre tabindex="0" aria-label="Install and redact commands"><code>cargo install --git https://github.com/B-Divyesh/sf-transcript-redaction-gate transcript-redaction-gate
-trg redact agent.jsonl \
-  --output agent.safe.jsonl \
-  --receipt findings.json</code></pre>
-          <button class="button primary copy-command" type="button" data-command="cargo install --git https://github.com/B-Divyesh/sf-transcript-redaction-gate transcript-redaction-gate">Copy install command</button>
-        </div>
-        <div class="workflow" aria-label="Redaction workflow">
-          <article><span>01</span><h3>Read locally</h3><p>Terminal text, stdin, and JSONL stay on your machine.</p></article>
-          <article><span>02</span><h3>Apply policy</h3><p>Known credentials, entropy, and your regular expressions.</p></article>
-          <article><span>03</span><h3>Export proof</h3><p>A redacted copy plus a path-free, value-free JSON receipt.</p></article>
-        </div>
-      </section>
-
-      <section class="team-kit section" id="team-kit" aria-labelledby="team-title">
-        <div class="kit-stamp" aria-hidden="true">TEAM<br />KIT</div>
-        <div class="kit-copy">
-          <p class="eyebrow">One-time license / $39</p>
-          <h2 id="team-title">Turn local rules into a team ritual.</h2>
-          <p>Unlock the browser policy composer for building and downloading repeatable JSON rule files. The CLI, safety detectors, receipts, and core export remain free.</p>
-          <div class="hero-actions">
-            <a class="button primary" id="buy-link" href="https://api.sociobot.in/api/v1/products/transcript-redaction-gate/checkout">Buy team kit — $39 once</a>
-            <button class="button ghost" type="button" id="show-license">Have a license?</button>
-          </div>
-          <p class="microcopy">Secure checkout by Sociobot/Dodo, merchant of record. Refunds revoke the license automatically. <a href="/terms/">Terms</a> · <a href="/privacy/">Privacy</a></p>
-          <form id="license-form" class="license-form" hidden>
-            <label for="license-token">License token</label>
-            <div><input id="license-token" type="password" autocomplete="off" required /><button class="button primary" type="submit">Verify license</button></div>
-          </form>
-          <p id="license-status" class="license-status" aria-live="polite"></p>
-        </div>
-        <div class="policy-composer" id="policy-composer" aria-labelledby="composer-title">
-          <span class="lock-tag" id="lock-tag">License required</span>
-          <h3 id="composer-title">Policy composer</h3>
-          <label for="policy-name">Pattern name</label>
-          <input id="policy-name" value="account-reference" disabled />
-          <label for="policy-regex">Rust regex</label>
-          <input id="policy-regex" value="ACCT-[A-Z0-9]{10}" disabled />
-          <button class="button ghost" id="download-policy" type="button" disabled>Download policy.json</button>
-        </div>
-      </section>
-
-      <section class="limits section" aria-labelledby="limits-title">
-        <p class="eyebrow">Honest boundary</p>
-        <h2 id="limits-title">A gate, not a guarantee.</h2>
-        <p>Pattern detection is advisory and cannot identify every form of personal data. Tune it to your environment, review the receipt, and rotate credentials that may already have escaped. TRG never claims an LLM can undo an upload.</p>
-      </section>
-    </main>
-
-    <footer>
-      <div><span class="brand-mark" aria-hidden="true"></span><strong>Transcript Redaction Gate</strong></div>
-      <p>Offline by design. MIT-licensed core. No telemetry.</p>
-      <nav aria-label="Legal navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-transcript-redaction-gate">Source</a></nav>
-    </footer>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
-</html>
+customer=CUST-12345678 status=failed</code></pre></div><div><p class="panel-label">Redacted transcript</p><pre><code>Authorization: Bearer [REDACTED:authorization]
+build completed in 1325ms
+customer=[REDACTED:policy:demo-pattern] status=failed</code></pre></div></div></section>
+<section class="install section" id="install" aria-labelledby="install-title"><div class="section-heading compact"><div><p class="eyebrow">Rust CLI</p><h2 id="install-title">Install the Rust CLI</h2></div><p>Use the CLI to scan files, read stdin, and load custom patterns.</p></div><div class="command-card"><div class="terminal-bar"><span aria-hidden="true">● ● ●</span><span>shell</span></div><pre tabindex="0" aria-label="Install and run the bundled demo"><code>cargo install --path crates/transcript-redaction-gate
+trg demo</code></pre><button class="button primary copy-command" type="button" data-command="cargo install --path crates/transcript-redaction-gate">Copy install command</button></div><div class="workflow" aria-label="How transcript redaction works"><article><span>01</span><h3>Choose a transcript</h3><p>Read terminal text, stdin, or JSONL from your machine.</p></article><article><span>02</span><h3>Choose detection rules</h3><p>Use built-in detectors or a custom pattern file.</p></article><article><span>03</span><h3>Save the results</h3><p>Write a redacted transcript and a receipt without matched values.</p></article></div></section>
+<section class="limits section" aria-labelledby="limits-title"><h2 id="limits-title">Detection limits</h2><p>Detection cannot identify every kind of personal data. Review the receipt and rotate credentials that may already have been shared.</p><p>Redaction cannot remove data from a service after you upload it.</p></section></main>
+<footer><div><span class="brand-mark" aria-hidden="true"></span><strong>Transcript Redaction Gate</strong></div><p>Remove detected secrets before sharing transcripts.</p><nav aria-label="Footer navigation"><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a><a href="https://github.com/B-Divyesh/sf-transcript-redaction-gate">Source <span class="sr-only">(opens GitHub)</span></a></nav><small>Built by Param Factory · build 0.1.0</small></footer><script type="module" src="/src/route.ts"></script><script type="module" src="/src/main.ts"></script></body></html>

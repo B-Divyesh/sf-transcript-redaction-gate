@@ -1,0 +1,1 @@
+Redact detected secrets from terminal and JSONL transcripts before sharing.

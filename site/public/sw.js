@@ -1,5 +1,5 @@
 const CACHE = "trg-shell-__TRG_BUILD_ID__";
-const SHELL = ["/", "/privacy/", "/terms/", "/proof-press-800.webp", "/mark.svg"];
+const SHELL = ["/", "/demo/", "/privacy/", "/terms/", "/proof-press-800.webp", "/mark.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));

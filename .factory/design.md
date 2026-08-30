@@ -29,7 +29,7 @@ Paper on ink is above 12:1; newsprint on ink is above 8:1; cyan on ink is above 
 
 ## Interaction grammar
 
-Actions are labeled like press controls: `RUN LOCAL CHECK`, `COPY COMMAND`, `VERIFY LICENSE`. A cyan registration square shifts into alignment on hover or focus. Findings use numbered proof marks. The live demo is a workbench, not a simulated terminal: input sits left and a non-sensitive receipt sits right; on phones these stack in reading order.
+Actions are labeled by result: `Try it with sample data`, `Redact transcript`, and `Copy install command`. A cyan registration square shifts into alignment on hover or focus. Findings use numbered proof marks. The live demo is a workbench, not a simulated terminal: input sits left and a non-sensitive receipt sits right; on phones these stack in reading order.
 
 Keyboard focus uses a 3px cyan outer keyline with an ink gap. Touch targets are at least 44px. Copy and license verification announce their result in live regions. Offline state is a normal, useful condition: the local demo continues, while license verification reports that the cached state remains in use.
 
@@ -40,6 +40,7 @@ Only physical, causal motion is used: the proof sheet rises 8px on first reveal,
 ## Asset plan and provenance
 
 - `site/public/proof-press.webp`: original wide hero illustration generated for this product with the factory image generator, then converted locally to WebP. `proof-press-800.webp` is its locally resized responsive derivative. Prompt: “editorial halftone screen-print illustration of a transcript passing through a mechanical privacy gate, secret-like glyphs entering and solid redaction bars plus a stamped receipt leaving; off-black, warm paper, cyan and registration red spot inks; coarse authentic Ben-Day dots, sharp flat shapes, no gradients, no logos, no words, ample dark negative space; wide landing-page composition.” Generator: `/opt/fleet/lib/gen-image.sh` (`factory-image` deployment). License: original project asset.
+- `site/public/proof-sheet-social.webp` and `apple-touch-icon.png`: local crops/resizes derived from the same original proof-press asset for sharing and device icons. License: original project asset.
 - All other marks (registration square, receipt seal, CLI window) are original CSS/HTML geometry; no stock icons or external imagery.
 
 The hero asset explains the product boundary—the moment a risky transcript becomes an exportable proof—rather than serving as atmospheric filler.

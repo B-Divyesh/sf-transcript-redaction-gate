@@ -80,3 +80,19 @@ fn invalid_jsonl_fails_closed() {
             .contains("invalid JSONL on line 1")
     );
 }
+
+#[test]
+fn claim_cli_demo_writes_bundled_sample_in_a_temporary_directory() {
+    let output = trg().arg("demo").output().unwrap();
+    assert!(output.status.success());
+    let stdout = String::from_utf8(output.stdout).unwrap();
+    assert!(stdout.contains("Demo redacted 2 finding(s)."));
+    let receipt_line = stdout
+        .lines()
+        .find(|line| line.starts_with("Receipt: "))
+        .unwrap();
+    let receipt = receipt_line.trim_start_matches("Receipt: ");
+    let receipt_body = fs::read_to_string(receipt).unwrap();
+    assert!(receipt_body.contains("authorization"));
+    assert!(!receipt_body.contains("demo_token_value"));
+}

@@ -1,0 +1,5 @@
+2026-08-30T09:14:22Z support-agent: retrying customer export
+Authorization: Bearer demo_token_value_1234567890
+build completed in 1325ms
+customer=CUST-12345678 status=failed
+2026-08-30T09:14:25Z support-agent: attaching receipt for review

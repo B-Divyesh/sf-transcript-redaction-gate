@@ -1,0 +1,9 @@
+[
+  {"id":"browser-demo-local","claim":"The browser demo does not send transcript text or save the sample as real data.","where":"Demo page and privacy policy","test":"npx playwright test --grep @claim:browser-demo-local","sandbox":"fresh browser context at /demo/; inspect requests and storage during sample redaction"},
+  {"id":"demo-reset","claim":"Reset demo restores the bundled sample.","where":"Demo banner","test":"npx playwright test --grep @claim:demo-reset","sandbox":"fresh browser context at /demo/; edit sample, reset, assert bundled output"},
+  {"id":"receipt-no-values","claim":"The receipt lists detector names, locations, and match lengths without matched values.","where":"Home sample result and README","test":"npx vitest run -t @claim:receipt-no-values","sandbox":"synthetic sample; serialize browser receipt and inspect fields and seeded values"},
+  {"id":"deterministic-output","claim":"The same input and rules produce the same output.","where":"README","test":"npx vitest run -t @claim:deterministic-output","sandbox":"run browser detector twice with fixed sample and custom pattern"},
+  {"id":"cli-demo","claim":"trg demo writes a bundled sample, redacted transcript, and receipt in a temporary directory.","where":"README and install section","test":"npx playwright test --grep @claim:cli-demo","sandbox":"built CLI in a fresh temporary directory; assert output files and receipt privacy"},
+  {"id":"offline-demo","claim":"The demo works offline after the first visit.","where":".factory/demo.md","test":"npx playwright test --grep @claim:offline-demo","sandbox":"new browser context, visit /demo/, wait for service worker, set offline, reload and redact sample"},
+  {"id":"mit-license","claim":"The project is MIT licensed.","where":"README","test":"npx vitest run -t @claim:mit-license","sandbox":"read distributed LICENSE file and assert MIT text"}
+]

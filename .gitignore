@@ -3,6 +3,7 @@ target/
 dist/
 .env
 *.log
+!examples/support-session.log
 graphify-out/
 test-results/
 .DS_Store

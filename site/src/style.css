@@ -45,6 +45,21 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .site-header nav a:hover, footer nav a:hover { color: var(--cyan); text-decoration: underline; }
 .network-state { color: var(--cyan); font-size: 14px; white-space: nowrap; }
 .network-state.offline { color: var(--amber); }
+.mobile-nav { display: none; margin-left: auto; }
+.mobile-nav summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; color: var(--paper); font-weight: 800; }
+.mobile-nav nav { position: absolute; top: 64px; right: 16px; display: grid; min-width: 152px; padding: 8px 16px; border: 1px solid var(--paper); background: var(--press); box-shadow: 5px 5px 0 var(--red); }
+.mobile-nav nav a { color: var(--paper); text-decoration: none; }
+.action-note { max-width: 30ch; color: var(--stock); font-size: 14px; }
+.demo-banner { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 12px max(24px, calc((100vw - 1200px) / 2)); border-bottom: 1px solid var(--cyan); background: var(--deep-cyan); color: var(--paper); }
+.demo-banner > div { display: flex; gap: 12px; align-items: center; }
+.text-button { min-height: 44px; padding: 8px 12px; border: 1px solid var(--cyan); background: transparent; color: var(--paper); font-weight: 800; text-decoration: none; cursor: pointer; }
+.proof-preview { background: var(--press); }
+.proof-card { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--paper); box-shadow: 8px 8px 0 var(--red); }
+.proof-card > div { min-width: 0; padding: 20px; }
+.proof-card > div + div { border-left: 1px solid var(--paper); }
+.proof-card pre { overflow: auto; white-space: pre-wrap; color: var(--stock); }
+.proof-card > div + div pre { color: var(--cyan); }
+.field-help { grid-column: 1 / -1; margin: 0; color: var(--stock); font-size: 13px; }
 main { overflow: hidden; }
 .hero { min-height: 720px; display: grid; grid-template-columns: minmax(0, .92fr) minmax(420px, 1.08fr); align-items: center; max-width: 1280px; margin: auto; padding: 72px 40px 80px; gap: 16px; }
 .hero-copy { position: relative; z-index: 2; }
@@ -132,6 +147,8 @@ input { min-height: 48px; padding: 10px 12px; }
 .limits { text-align: center; }
 .limits h2 { color: var(--red); }
 .limits > p:last-child { max-width: 78ch; margin: 24px auto 0; color: var(--stock); }
+.not-found { min-height: 62vh; display: grid; align-content: center; justify-items: start; gap: 18px; }
+.not-found p { max-width: 52ch; color: var(--stock); }
 footer { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px; padding: 40px max(24px, calc((100vw - 1200px) / 2)); border-top: 1px solid var(--line); color: var(--stock); }
 footer > div { display: flex; align-items: center; gap: 12px; color: var(--paper); }
 footer p { font-size: 13px; }
@@ -139,13 +156,16 @@ footer nav { display: flex; justify-content: flex-end; gap: 20px; }
 
 @media (max-width: 900px) {
   .site-header { gap: 16px; }
-  .site-header nav { display: none; }
+  .desktop-nav { display: none !important; }
+  .mobile-nav { display: block; }
   .network-state { margin-left: auto; }
   .hero { grid-template-columns: 1fr; padding-top: 56px; }
   .hero-art { margin: -80px -24% -40px 2%; z-index: 0; }
   .hero-copy { z-index: 1; }
   .section-heading { grid-template-columns: 1fr; }
   .bench-grid { grid-template-columns: 1fr; }
+  .proof-card { grid-template-columns: 1fr; }
+  .proof-card > div + div { border-top: 1px solid var(--paper); border-left: 0; }
   .input-panel { border-right: 0; border-bottom: 1px solid var(--paper); }
   .workflow { gap: 20px; }
   .team-kit { grid-template-columns: 130px 1fr; }
@@ -178,6 +198,9 @@ footer nav { display: flex; justify-content: flex-end; gap: 20px; }
   .team-kit { grid-template-columns: 1fr; }
   .kit-stamp { width: 90px; height: 90px; font-size: 20px; }
   .hero-actions .button { width: 100%; text-align: center; }
+  .demo-banner { align-items: flex-start; padding-inline: 20px; flex-direction: column; }
+  .demo-banner > div { width: 100%; }
+  .demo-banner .text-button { flex: 1; text-align: center; }
 }
 
 @media (prefers-reduced-motion: reduce) {

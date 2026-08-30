@@ -17,6 +17,18 @@ describe("deployment safeguards", () => {
     expect(csp).toContain("script-src 'self'");
     expect(config.globalHeaders["permissions-policy"]).toContain("camera=()");
     expect(config.globalHeaders["x-frame-options"]).toBe("DENY");
+    expect(config.globalHeaders["x-content-type-options"]).toBe("nosniff");
+  });
+
+  test("@claim:mit-license ships the MIT license", async () => {
+    const license = await readFile(fileURLToPath(new URL("../../LICENSE", import.meta.url)), "utf8");
+    expect(license).toContain("Permission is hereby granted");
+    expect(license).toContain("THE SOFTWARE IS PROVIDED \"AS IS\"");
+  });
+
+  test("hosting returns the designed 404 document", async () => {
+    const config = JSON.parse(await readFile(publicFile("staticwebapp.config.json"), "utf8")) as { responseOverrides: { "404": { rewrite: string } } };
+    expect(config.responseOverrides["404"].rewrite).toBe("/404.html");
   });
 
   test("worker source uses a build-specific cache and revalidates navigations", async () => {

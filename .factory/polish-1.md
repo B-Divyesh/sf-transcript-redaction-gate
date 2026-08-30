@@ -80,7 +80,7 @@ Candidate repaired from `4b73957dfb3e92b9bfe6982f796425b74c94d378` in repair com
 
 ## Verification
 
-- `npm test`: pass — TypeScript, 12 Rust tests plus doctest, 9 Vitest tests, 10 Playwright tests.
+- `npm test`: pass — TypeScript, 12 Rust tests plus doctest, 9 Vitest tests, 12 Playwright tests.
 - `npm run lint`: pass.
 - `npm run build`: pass — `dist/site/` and `dist/bin/trg`.
 - Each of the twelve commands in `.factory/claims.json`: pass.

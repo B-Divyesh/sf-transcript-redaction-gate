@@ -17,7 +17,7 @@ Repair commit: `11d9eb49d3182f21bee398d4b8b7bafa82997aa6`, with final routing re
 ## Verification
 
 - `npm ci`: pass.
-- `npm test`: pass — 12 Rust tests plus one doctest, 9 Vitest tests, and 10 Playwright tests.
+- `npm test`: pass — 12 Rust tests plus one doctest, 9 Vitest tests, and 12 Playwright tests.
 - `npm run lint`: pass.
 - `npm run build`: pass; produces `dist/site/` and `dist/bin/trg`.
 - All twelve commands in `.factory/claims.json`: pass.

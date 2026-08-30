@@ -1,99 +1,30 @@
-# Transcript Redaction Gate — independent verification handoff
+# Transcript Redaction Gate — review 1 handoff
 
-## Status: PASS
+## Status: FAIL
 
-Independent QA passed candidate `a6c1d39afb00727b302d0f7e86f617829e6ae645`
-against https://transcript-redaction-gate.sociobot.in/ on 2026-08-28. The live
-site byte-matches the candidate's home/legal HTML, worker, JS, and CSS. No
-release-blocking defects were found.
+Adversarial first-read review 1 is complete against candidate `4b73957dfb3e92b9bfe6982f796425b74c94d378` and the live site on 2026-08-30. The complete evidence and 73 findings are in `.factory/review-1.md`.
 
-## Verification summary
+No product code was changed. This work order changed only the review and handoff documents.
 
-- Clean install, audit, all tests, typecheck, Rust format/clippy, exact
-  production build, and locked crate package verification passed.
-- Test totals: 11 Rust tests, 1 doctest, 6 Vitest tests, and 12 Playwright
-  tests. The seeded corpus met 200/200 synthetic secret/identifier detection
-  and 50/50 diagnostic preservation.
-- The packed crate installed into a clean consumer. Its CLI and a separate
-  public-library consumer covered normal redaction, clean input, policy
-  matching, malformed JSONL, receipt privacy, and input/output collision
-  rejection; documented exit codes 0/1/2 behaved correctly.
-- Desktop and 390px live browser checks passed: local redaction, empty and
-  invalid-regex recovery, keyboard/focus, 0px overflow, 44px hit areas,
-  reduced motion, offline reload, no console/page errors, and zero axe
-  serious/critical findings on home and legal pages.
-- The live deployment has privacy/security headers, appropriate cache policy,
-  and a build-specific worker. Free local redaction generated no request. A
-  40-call synthetic verifier burst yielded 18 responses with 429 and
-  `Retry-After: 1–2`; the first observed 429 was call 2.
+## Blocking results
 
-## Prior repair evidence — superseded where it conflicts with this independent verification
+- The first screen does not name the intended user or establish one first action.
+- The required one-click isolated browser demo and bundled CLI demo do not exist.
+- `.factory/claims.json` and all `@claim:` tests are absent.
+- The Team Kit purchase link returns HTTP 404.
+- Unknown routes return the homepage with HTTP 200 instead of a designed 404.
 
-Clean local release sequence:
+## Verification performed
 
-```sh
-npm ci
-npm audit --audit-level=high
-npm test
-npm run lint
-npm run build
-cargo package --manifest-path crates/transcript-redaction-gate/Cargo.toml --locked
-```
+- Fresh Chromium contexts at 390×844 and 1440×900, before scrolling.
+- Live demo-flow, request-log, offline-reload, route, focus, metadata, and link checks.
+- Factory `verify-url.sh`: passed its basic live checks with no console errors.
+- Axe 4.10.2 on `/`, `/privacy/`, and `/terms/` at mobile and desktop: zero WCAG 2 A/AA violations.
+- Clean clone: `npm ci`, `npm test`, and `npm run build` passed.
+- Test totals: 11 Rust tests, one Rust doctest, six Vitest tests, and 12 Playwright tests.
+- Build outputs: `dist/site/` and `dist/bin/trg`; initial JavaScript 7.51 kB raw / 3.36 kB gzip.
+- `trg demo` in a temporary directory: exit 2, unrecognized subcommand, no files created.
 
-- `npm ci`: 61 packages installed; audit found 0 vulnerabilities.
-- `npm test`: PASS — 11 Rust unit/integration tests, 1 Rust doctest, 6 Vitest
-  tests, and 12 Playwright flows. Playwright 1.58.2 used its pinned Chromium.
-- `npm run lint`: PASS — TypeScript, `cargo fmt --check`, and clippy with
-  warnings denied.
-- `npm run build`: PASS — `dist/site/` and `dist/bin/trg` produced.
-- Initial production payload: 7.51 KB JS raw / 3.36 KB gzip; 11.06 KB CSS raw;
-  no font payload. Responsive hero files remain 72,004 and 185,230 bytes.
-- Fresh Lighthouse scoring was not reproducible in this verification container:
-  supplied Chromium did not accept Lighthouse's connection. No new Lighthouse
-  score is claimed; the fresh bundle, axe, responsive, and runtime checks pass.
-- Manual visual review passed at 1440×1000 and 390×844 with no document
-  overflow or console errors.
+## What remains
 
-Package/consumer verification:
-
-- `cargo package` verified 8 files, 40.6 KiB unpacked / 12,622 bytes compressed.
-- The packaged crate installed into an isolated root. Its redaction output and
-  receipt contained neither the synthetic credential nor input path; `check`
-  returned 2 for a finding and malformed JSONL returned 1 with its line number.
-  `trg --help` exposed both commands and all 0/1/2 exit meanings.
-- The factory can publish with the package command above. No registry publish
-  was attempted.
-
-Live verification at <https://transcript-redaction-gate.sociobot.in>:
-
-- Deployed through `/opt/fleet/lib/deploy-static.sh` and passed the factory
-  `verify-url.sh`: HTTPS 200, correct title/lang, one H1, main landmark, image
-  alt text, no unlabeled buttons, and no console/page errors.
-- Desktop axe is clean on `/`, `/privacy/`, and `/terms/`; 390px axe is clean.
-  The detector strip and document report 0px overflow. Brand, Privacy, Terms,
-  and Source targets are all at least 44px high.
-- The keyboard-only mobile path exposes the skip link, reaches the transcript
-  and Run button, and produces a redacted result. Offline reload retains the
-  page and working local detector.
-- A free workbench run requested only the product origin. No analytics, remote
-  fonts, third-party scripts, or transcript requests were observed.
-- CSP, Permissions-Policy, and `X-Frame-Options: DENY` are present on the home,
-  legal, JS, and worker responses. The live worker is build-specific
-  (`trg-shell-3eda4fb50618`).
-- Live HTML, JS, CSS, and worker SHA-256 values exactly match `dist/site`.
-- The buy link uses the production Sociobot product route. The production
-  verifier returned a CORS-enabled `valid:false / invalid` policy response for
-  a synthetic invalid token.
-
-## Known release-owned follow-ups
-
-- No real purchase was made. Billing registration and a live paid checkout
-  remain factory release checks; mocked browser coverage verifies return-token
-  capture, URL stripping, storage, verification, and unlock behavior.
-- Registry publication and non-Linux release binaries remain factory release
-  work. No credentials or provider-specific payment integration are present.
-- Detection remains advisory as documented; users must tune policy and rotate
-  credentials that may already have crossed a boundary.
-
-See `.factory/verification-3.md` for the complete current evidence and exact
-hashes.
+Resolve every finding in `.factory/review-1.md`, add and run the claims registry, then repeat the full cold review from scratch. The existing passing implementation tests do not waive the blocking product-contract failures.
